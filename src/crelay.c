@@ -77,8 +77,8 @@
 /* Global variables */
 config_t config;
 
-static char rlabels[MAX_NUM_RELAYS][32] = {"My appliance 1", "My appliance 2", "My appliance 3", "My appliance 4",
-                                           "My appliance 5", "My appliance 6", "My appliance 7", "My appliance 8"};                                       
+static char rlabels[MAX_NUM_RELAYS][32] = {"No connect", "No connect", "No connect", "Power supply",
+                                           "Volume down", "Power button", "Force USB Boot", "Volume Up"};                                       
 
 /**********************************************************
  * Function: config_cb()
@@ -350,7 +350,7 @@ void web_page_header(FILE *f)
    /* Send http header */
    send_headers(f, 200, "OK", NULL, "text/html", -1, -1);   
    fprintf(f, "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\r\n");
-   fprintf(f, "<html><head><title>Relay Card Control</title>\r\n");
+   fprintf(f, "<html><head><title>Origami Remote Control</title>\r\n");
    style_sheet(f);
    java_script_src(f);
    fprintf(f, "</head>\r\n");
@@ -358,8 +358,7 @@ void web_page_header(FILE *f)
    /* Display web page heading */
    fprintf(f, "<body><table style=\"text-align: left; width: 460px; background-color: #2196F3; font-family: Helvetica,Arial,sans-serif; font-weight: bold; color: white;\" border=\"0\" cellpadding=\"2\" cellspacing=\"2\">\r\n");
    fprintf(f, "<tbody><tr><td>\r\n");
-   fprintf(f, "<span style=\"vertical-align: top; font-size: 48px;\">Relay Card Control</span><br>\r\n");
-   fprintf(f, "<span style=\"font-size: 16px; color: rgb(204, 255, 255);\">Remote relay card control <span style=\"font-style: italic; color: white;\">made easy</span></span>\r\n");
+   fprintf(f, "<span style=\"vertical-align: top; font-size: 48px;\">Origami Remote Control</span><br>\r\n");
    fprintf(f, "</td></tr></tbody></table><br>\r\n");  
 }
 
@@ -681,8 +680,8 @@ int process_http_request(int sock)
          for (i=FIRST_RELAY; i<=last_relay; i++)
          {
             fprintf(fout, "<tr style=\"vertical-align: top; background-color: rgb(230, 230, 255);\">\r\n");
-            fprintf(fout, "<td style=\"width: 300px;\">Relay %d<br><span style=\"font-style: italic; font-size: 16px; color: grey;\">%s</span></td>\r\n", 
-                    i, rlabels[i-1]);
+            fprintf(fout, "<td style=\"width: 300px;\">%s<br><span style=\"font-style: italic; font-size: 16px; color: grey;\">Relay %d</span></td>\r\n", 
+                    rlabels[i-1],i);
             fprintf(fout, "<td style=\"text-align: center; vertical-align: middle; width: 100px; background-color: white;\"><label class=\"switch\"><input type=\"checkbox\" %s id=%d onchange=\"switch_relay(this)\"><span class=\"slider\"></span></label></td>\r\n", 
                     rstate[i-1]==ON?"checked":"",i);
          }
